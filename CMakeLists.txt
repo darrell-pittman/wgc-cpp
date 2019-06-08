@@ -1,0 +1,19 @@
+cmake_minimum_required (VERSION 2.6)
+project (wgc)
+
+set(HEADER 
+  include/wgc/wgc_job_thread.h
+)
+
+set(SOURCE
+  src/wgc_job_thread.cpp
+)
+
+add_library(wgc SHARED ${HEADER} ${SOURCE})
+
+target_compile_features(wgc PUBLIC cxx_std_17)
+target_include_directories(wgc PUBLIC include)
+
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
+target_link_libraries(wgc Threads::Threads)
