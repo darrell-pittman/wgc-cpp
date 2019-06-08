@@ -1,7 +1,7 @@
-#WGC-CPP
+# WGC-CPP
 Some c++ utilities.
 
-###wgc::JobThread
+### wgc::JobThread
 
 A functor used to create a long running thread to which Tasks can be submitted.
 
