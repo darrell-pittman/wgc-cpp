@@ -10,7 +10,11 @@ namespace wgc
       Condition.wait(Lock, [this]{return !Alive || Executing;});
       if(Alive)
       {
-          Job();
+        while(!Jobs.empty())
+        {
+          Jobs.front()();
+          Jobs.pop();
+        }
       }
       Executing = false;
       Condition.notify_one();      
@@ -20,7 +24,7 @@ namespace wgc
   void JobThread::RunJob(Task InJob)
   {
     std::unique_lock<std::mutex> Lock(Guard);
-    Job = InJob;
+    Jobs.push(InJob);
     if(!Alive)
     {
       Alive = true;
@@ -39,7 +43,10 @@ namespace wgc
 
   void JobThread::Join()
   {
-    Thread.join();
+    if(Thread.joinable())
+    {
+      Thread.join();
+    }
   }
 
   void JobThread::Stop(const bool BlockUntilStopped)

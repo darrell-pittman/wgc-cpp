@@ -7,6 +7,7 @@
 #include <thread>
 #include <memory>
 #include <string>
+#include <queue>
 
 namespace wgc
 {
@@ -32,7 +33,7 @@ namespace wgc
     std::mutex Guard;
     std::condition_variable Condition;
     bool Executing = false;
-    Task Job;
+    std::queue<Task> Jobs;
     std::thread Thread;
   };
 }
