@@ -5,7 +5,7 @@ Some c++ utilities.
 
 A functor used to create a long running thread to which Tasks can be submitted. Note: RunJob method will block if the thread is already executing a job. So the pattern of use should be:
 
-RunJob Wait RunJob Wait ... Stop.
+> RunJob > Wait > RunJob > Wait > ... > Stop.
 
 Thread is stopped in Destructor.
 
@@ -37,7 +37,7 @@ A for-each algorithm that calls handler with item and index.
 Example:
 
 ```
-std::vector<charChars{'a', 'b', 'c', 'd'};
+std::vector<char> Chars{'a', 'b', 'c', 'd'};
 wgc::ForEachWithIndex(Chars.cbegin(), Chars.cend(), [](const char Item, int64_t Index) {
   std::cout << "[" << Index << " : " << Item << "]\n";
 });
@@ -57,7 +57,7 @@ Algorithm to breah collection into chunks. Only complete chunks are handed to th
 Example:
 
 ```
-std::vector<intNumbers{1,2,3,4,5,6,7,8};
+std::vector<int> Numbers{1,2,3,4,5,6,7,8};
 auto Remainder = wgc::Chunk(Numbers.cbegin(), Numbers.cend(), 3, [](auto First, auto Last) {
   std::cout << "[";
   for(; First != Last; ++First)
@@ -81,7 +81,7 @@ Same as wgc::Chunk except handler is called with all chunks even if they are < C
 Example:
 
 ```
-std::vector<intNumbers{1,2,3,4,5,6,7,8};
+std::vector<int> Numbers{1,2,3,4,5,6,7,8};
 wgc::ChunkAll(Numbers.cbegin(), Numbers.cend(), 3, [](auto First, auto Last) {
   std::cout << "[";
   for(; First != Last; ++First)
@@ -104,25 +104,33 @@ An algorithm that chunks through a collection of indices, finds corresponding En
 Example:
 
 ```
-std::vector<int16_tIndices{
+std::vector<int16_t> Indices{
   0,1,2,
   1,3,2
 };
 
-std::vector<VertexVertices {
+std::vector<Vertex> Vertices {
   {0,0,0},
   {2,0,0},
   {1,1,0},
   {1,-1,0}
 };
 
-wgc::ForEachIndexedEntity(Indices.cbegin(), Indices.cend(), Vertices.cbegin(), 3, [](auto First, auto Last) {
+auto TriangleHandler = [](auto First, auto Last) {
   for(; First != Last; ++First)
   {
+    // In this example, Vertex can be written to std::cout
     std::cout << *First << "\n";
   }
   std::cout << "\n";
-});
+};
+
+wgc::ForEachIndexedEntity(
+  Indices.cbegin(),
+  Indices.cend(),
+  Vertices.cbegin(),
+  3,
+  TriangleHandler);
 ```
 Output:
 ```
