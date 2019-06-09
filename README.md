@@ -5,7 +5,7 @@ Some c++ utilities.
 
 A functor used to create a long running thread to which Tasks can be submitted. Note: RunJob method will block if the thread is already executing a job. So the pattern of use should be:
 
-> RunJob > Wait > RunJob > Wait > ... > Stop.
+RunJob Wait RunJob Wait ... Stop.
 
 Thread is stopped in Destructor.
 
@@ -37,18 +37,18 @@ A for-each algorithm that calls handler with item and index.
 Example:
 
 ```
-std::vector<char> Chars{'a', 'b', 'c', 'd'};
+std::vector<charChars{'a', 'b', 'c', 'd'};
 wgc::ForEachWithIndex(Chars.cbegin(), Chars.cend(), [](const char Item, int64_t Index) {
   std::cout << "[" << Index << " : " << Item << "]\n";
 });
 ```
 Output of above:
-
-> [0 : a]
-> [1 : b]
-> [2 : c]
-> [3 : d]
-
+```
+[0 : a]
+[1 : b]
+[2 : c]
+[3 : d]
+```
 
 ### wgc::Chunk
 
@@ -57,7 +57,7 @@ Algorithm to breah collection into chunks. Only complete chunks are handed to th
 Example:
 
 ```
-std::vector<int> Numbers{1,2,3,4,5,6,7,8};
+std::vector<intNumbers{1,2,3,4,5,6,7,8};
 auto Remainder = wgc::Chunk(Numbers.cbegin(), Numbers.cend(), 3, [](auto First, auto Last) {
   std::cout << "[";
   for(; First != Last; ++First)
@@ -69,10 +69,11 @@ auto Remainder = wgc::Chunk(Numbers.cbegin(), Numbers.cend(), 3, [](auto First, 
 std::cout << "Remainder points to: " << *Remainder << "\n";
 ```
 Output:
-> [123]
-> [456]
-> Remainder points to: 7
-
+```
+[123]
+[456]
+Remainder points to: 7
+```
 ### wgc::ChunkAll
 
 Same as wgc::Chunk except handler is called with all chunks even if they are < ChunkSize.
@@ -80,7 +81,7 @@ Same as wgc::Chunk except handler is called with all chunks even if they are < C
 Example:
 
 ```
-std::vector<int> Numbers{1,2,3,4,5,6,7,8};
+std::vector<intNumbers{1,2,3,4,5,6,7,8};
 wgc::ChunkAll(Numbers.cbegin(), Numbers.cend(), 3, [](auto First, auto Last) {
   std::cout << "[";
   for(; First != Last; ++First)
@@ -91,10 +92,11 @@ wgc::ChunkAll(Numbers.cbegin(), Numbers.cend(), 3, [](auto First, auto Last) {
 });
 ```
 Output:
-> [123]
-> [456]
-> [78]
-
+```
+[123]
+[456]
+[78]
+```
 ### wgc::ForEachIndexedEntity
 
 An algorithm that chunks through a collection of indices, finds corresponding Entities in an entity collection and calls handler with Entities.  For example, in graphics programming you often have a vector of indices that hold the indices to Vertices in a Vertex vector. This algorithm will iterate the triangle vertices and call the handler with each triangle:
@@ -102,12 +104,12 @@ An algorithm that chunks through a collection of indices, finds corresponding En
 Example:
 
 ```
-std::vector<int16_t> Indices{
+std::vector<int16_tIndices{
   0,1,2,
   1,3,2
 };
 
-std::vector<Vertex> Vertices {
+std::vector<VertexVertices {
   {0,0,0},
   {2,0,0},
   {1,1,0},
@@ -123,11 +125,12 @@ wgc::ForEachIndexedEntity(Indices.cbegin(), Indices.cend(), Vertices.cbegin(), 3
 });
 ```
 Output:
+```
+[0,0,0]
+[2,0,0]
+[1,1,0]
 
-> [0,0,0]
-> [2,0,0]
-> [1,1,0]
-> 
-> [2,0,0]
-> [1,-1,0]
-> [1,1,0]
+[2,0,0]
+[1,-1,0]
+[1,1,0]
+```
