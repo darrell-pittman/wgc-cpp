@@ -203,3 +203,32 @@ for(auto i = 0; i < 6; i++)
   Futures.push_back(std::move(Future));
 }
 ```
+###wgc::ByteBuffer
+
+A convenience class for creating a vector of bytes.
+
+Example:
+```
+enum class Test
+{
+  One,
+  Two,
+};
+
+wgc::ByteBuffer bytes;
+
+bytes 
+  << Test::Two
+  << 10
+  << "10"
+  << std::to_string(11)
+  << std::vector<int>{1,2};
+
+uint16_t Array[3]{4,5,6};
+bytes.AsStringStream().write(
+  reinterpret_cast<const char*>(Array), 
+  sizeof(Array)
+);
+
+auto t = bytes.GetBytes();
+```
