@@ -203,7 +203,7 @@ for(auto i = 0; i < 6; i++)
   Futures.push_back(std::move(Future));
 }
 ```
-###wgc::ByteBuffer
+### wgc::ByteBuffer
 
 A convenience class for creating a vector of bytes.
 
