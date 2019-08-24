@@ -142,3 +142,64 @@ Output:
 [1,-1,0]
 [1,1,0]
 ```
+
+### wgc::Sequence
+
+Provides an increment sequence of values and rolls over when Max is reached.  Default version is not thread-safe. The Synchronized method returns a thread-safe version of the Sequence.
+
+Rollover Example:
+```
+// This example uses a uint8_t Sequence with InitValue = 0 and MaxValue = 255
+// We burn off the first 256 Sequence values (0 - 255). Then we print Seq.Next()
+// which will give the rolled value of 0;
+
+wgc::Sequence<uint8_t>Seq;
+
+for(auto i = 0; i < 256; i++)
+{
+  Seq.Next();
+}
+
+std::cout << "Rolled Value: " << std::to_string(Seq.Next()) << std::endl;
+```
+Output:
+```
+Rolled Value: 0
+```
+
+Limits Example:
+```
+// This example uses an uint32_t Sequence with range 1 t0 5
+
+wgc::Sequence<uint32_t>Seq(1, 5);
+
+for(auto i = 0; i < 6; i++)
+{
+  std::cout << "Val: " << std::to_string(Seq.Next() << "\n";
+}
+```
+Output:
+```
+Val: 1
+Val: 2
+Val: 3
+Val: 4
+Val: 5
+Val: 1
+```
+
+Synchronized Example:
+```
+// This example uses a Synchronized Sequence of uint32_t with range 1 t0 5
+auto SyncSeq = wgc::Sequence(1,5).Synchronized();
+
+std::vector<std::future<void>> Futures;
+
+for(auto i = 0; i < 6; i++)
+{
+  auto Future = std::async(std::launch::async, [&SyncSeq](){
+    std::cout << "Val: " << std::to_string(SyncSeq->Next()) << "\n";
+  });
+  Futures.push_back(std::move(Future));
+}
+```

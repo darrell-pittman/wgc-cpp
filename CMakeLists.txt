@@ -1,5 +1,5 @@
-cmake_minimum_required (VERSION 2.6)
-project (wgc)
+cmake_minimum_required (VERSION 3.0.0)
+project (wgc VERSION 0.1.0)
 
 set(HEADER 
   include/wgc/wgc_job_thread.h
