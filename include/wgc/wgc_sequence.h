@@ -32,7 +32,9 @@ namespace wgc
 
     std::unique_ptr<Sequence<T>> Synchronized()
     {
-      return StaticUniquePtrCast<Sequence<T>>(std::make_unique<SyncSequence<T>>(Init, Max));
+      auto Seq = StaticUniquePtrCast<Sequence<T>>(std::make_unique<SyncSequence<T>>(Init, Max));
+      Seq->Current = Current;
+      return Seq;
     }
 
   private:
