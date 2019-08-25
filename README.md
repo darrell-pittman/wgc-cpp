@@ -190,7 +190,7 @@ Val: 1
 
 Synchronized Example:
 ```
-// This example uses a Synchronized Sequence of uint32_t with range 1 t0 5
+// This example uses a Synchronized Sequence of uint32_t with range 1 to 5
 auto SyncSeq = wgc::Sequence(1,5).Synchronized();
 
 std::vector<std::future<void>> Futures;
