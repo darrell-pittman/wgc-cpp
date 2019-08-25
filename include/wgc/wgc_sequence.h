@@ -1,6 +1,8 @@
 #ifndef WGC_SEQUENCE_H
 #define WGC_SEQUENCE_H
 
+#include "wgc/wgc_memory.h"
+
 #include <type_traits>
 #include <limits>
 #include <memory>
@@ -30,8 +32,7 @@ namespace wgc
 
     std::unique_ptr<Sequence<T>> Synchronized()
     {
-      auto Sync = std::make_unique<SyncSequence<T>>(Init, Max);
-      return std::unique_ptr<Sequence<T>>{reinterpret_cast<Sequence<T>*>(Sync.release())};
+      return StaticUniquePtrCast<Sequence<T>>(std::make_unique<SyncSequence<T>>(Init, Max));
     }
 
   private:

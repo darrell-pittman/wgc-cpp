@@ -5,6 +5,7 @@ set(HEADER
   include/wgc/wgc_algorithms.h
   include/wgc/wgc_bytebuffer.h
   include/wgc/wgc_job_thread.h
+  include/wgc/wgc_memory.h
   include/wgc/wgc_sequence.h
 )
 
