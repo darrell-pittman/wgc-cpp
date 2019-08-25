@@ -169,7 +169,7 @@ Rolled Value: 0
 
 Limits Example:
 ```
-// This example uses an uint32_t Sequence with range 1 t0 5
+// This example uses an uint32_t Sequence with range 1 to 5
 
 wgc::Sequence<uint32_t>Seq(1, 5);
 
@@ -231,4 +231,18 @@ bytes.AsStringStream().write(
 );
 
 auto t = bytes.GetBytes();
+```
+### wgc::StaticUniquePtrCast
+
+Casts unique_ptr from derived to base class.
+
+Example:
+```
+class Base
+{};
+
+class Derived : public Base
+{};
+
+std::unique_ptr<Base> BasePtr = wgc::StaticUniquePtrCast<Base>(std::make_unique<Derived>());
 ```
