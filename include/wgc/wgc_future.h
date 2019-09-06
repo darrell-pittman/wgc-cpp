@@ -1,5 +1,5 @@
-#ifndef WGC_BYTEBUFFER_H
-#define WGC_BYTEBUFFER_H
+#ifndef WGC_FUTURE_H
+#define WGC_FUTURE_H
 
 #include <future>
 #include <chrono>
