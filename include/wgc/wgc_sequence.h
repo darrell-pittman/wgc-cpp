@@ -3,20 +3,20 @@
 
 #include "wgc/wgc_memory.h"
 
-#include <type_traits>
 #include <limits>
 #include <memory>
 #include <mutex>
+#include <type_traits>
 
 namespace wgc
 {
-  template<class T, typename std::enable_if_t<std::is_integral_v<T>, T>* = nullptr>
+  template <class T, typename std::enable_if_t<std::is_integral_v<T>, T>* = nullptr>
   class Sequence
   {
   private:
-    template<class U, typename std::enable_if_t<std::is_integral_v<U>, U>* = nullptr>
+    template <class U, typename std::enable_if_t<std::is_integral_v<U>, U>* = nullptr>
     class SyncSequence;
-    
+
   public:
     Sequence(T InitialValue = 0, T MaxValue = std::numeric_limits<T>::max())
       : Init{InitialValue}
@@ -42,23 +42,24 @@ namespace wgc
     T Max;
     T Current;
 
-    template<class U, typename std::enable_if_t<std::is_integral_v<U>, U>*>
+    template <class U, typename std::enable_if_t<std::is_integral_v<U>, U>*>
     class SyncSequence : public Sequence<U>
     {
     public:
       SyncSequence(U InitialValue = 0, U MaxValue = std::numeric_limits<T>::max())
         : Sequence<U>(InitialValue, MaxValue)
-      {} 
+      {}
 
       U Next() override
       {
         std::unique_lock<std::mutex> Lock(Guard);
         return Sequence<U>::Next();
       }
+
     private:
       std::mutex Guard;
     };
   };
-}
+} // namespace wgc
 
 #endif

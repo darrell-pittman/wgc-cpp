@@ -1,13 +1,13 @@
 #ifndef WGC_JOB_THREAD_H
 #define WGC_JOB_THREAD_H
 
-#include <functional>
-#include <mutex>
 #include <condition_variable>
-#include <thread>
+#include <functional>
 #include <memory>
-#include <string>
+#include <mutex>
 #include <queue>
+#include <string>
+#include <thread>
 
 namespace wgc
 {
@@ -36,6 +36,6 @@ namespace wgc
     std::queue<Task> Jobs;
     std::thread Thread;
   };
-}
+} // namespace wgc
 
 #endif

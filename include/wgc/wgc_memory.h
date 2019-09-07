@@ -5,11 +5,11 @@
 
 namespace wgc
 {
-  template<typename Base, typename Derived>
+  template <typename Base, typename Derived>
   std::unique_ptr<Base> StaticUniquePtrCast(std::unique_ptr<Derived>&& From)
   {
     return std::unique_ptr<Base>{static_cast<Base*>(From.release())};
   }
-}
+} // namespace wgc
 
 #endif
