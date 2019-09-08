@@ -3,33 +3,47 @@ Some c++ utilities.
 
 ### wgc::JobThread
 
-A functor used to create a long running thread to which Tasks can be submitted. Note: RunJob method will block if the thread is already executing a job. So the pattern of use should be:
-
-> RunJob > Wait > RunJob > Wait > ... > Stop.
-
-Thread is stopped in Destructor.
+A functor used to create a long running thread to which Tasks can be submitted. 
+Note:: Will run all tasks before it is destructed.
 
 Example usage:
 ```
 auto Thread = std::unique_ptr<wgc::JobThread>();
 
 //Submit job
-Thread->RunJob([]() {
+std::future<void> Future = Thread->RunJob([]() {
   ...Some job executed.
 });
 
 //Wait for job to complete
-Thread->Wait();
+Future.wait();
 
 //Submit another job
-Thread->RunJob([]() {
+Future = Thread->RunJob([]() {
   ...Some job executed.
 });
-
-//Stop thread
-Thread->Stop();
 ```
+### wgc::NamedThread
+A std::thread that takes a name in it's constructor.
+Calls to wgc::ThisThreadName() will return the name of the NamedThread if it is the current thread otherwise it returns "No Name".
 
+Example:
+```
+wgc::NamedThread Nt("Thread Name", []() {
+  std::this_thread::sleep_for(std::chrono::seconds(1));
+  std::cout << "wgc::ThisThreadName() is: " << wgc::ThisThreadName() << "\n";
+});
+
+std::cout << "Nt.GetName() is: " << Nt.GetName() << "\n";
+std::cout << "Main Thread Name: " << wgc::ThisThreadName() << "\n";
+Nt.join();
+```
+Output:
+```
+Nt.GetName() is: Thread Name
+Main Thread Name: No Name
+wgc::ThisThreadName() is: Thread Name
+```
 ### wgc::ForEachWithIndex
 
 A for-each algorithm that calls handler with item and index.

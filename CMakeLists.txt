@@ -6,11 +6,13 @@ set(HEADER
   include/wgc/wgc_bytebuffer.h
   include/wgc/wgc_job_thread.h
   include/wgc/wgc_memory.h
+  include/wgc/wgc_named_thread.h
   include/wgc/wgc_sequence.h
 )
 
 set(SOURCE
   src/wgc_job_thread.cpp
+  src/wgc_named_thread.cpp
   src/wgc_bytebuffer.cpp
 )
 
