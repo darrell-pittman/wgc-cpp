@@ -17,7 +17,6 @@ namespace wgc
     using Task = std::function<void()>;
 
     JobThread();
-    JobThread(const std::string& ThreadName);
     JobThread(const JobThread&) = delete;
     JobThread(JobThread&&) = delete;
     JobThread& operator=(const JobThread&) = delete;

@@ -8,11 +8,6 @@ namespace wgc
     Thread = std::make_unique<std::thread>(std::ref(*this));
   }
 
-  JobThread::JobThread(const std::string& ThreadName)
-  {
-    Thread = std::make_unique<wgc::NamedThread>(ThreadName, std::ref(*this));
-  }
-
   void JobThread::operator()()
   {
     while(Alive)
