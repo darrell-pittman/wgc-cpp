@@ -8,7 +8,7 @@ Note:: Will run all tasks before it is destructed.
 
 Example usage:
 ```
-auto Thread = std::unique_ptr<wgc::JobThread>();
+auto Thread = std::make_unique<wgc::JobThread>();
 
 // Submit job
 std::future<void> Future = Thread->RunJob([]() {
