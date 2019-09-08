@@ -15,7 +15,12 @@ std::future<void> Future = Thread->RunJob([]() {
   ...Some job executed.
 });
 
-//Wait for job to complete
+//Submit another job
+Future = Thread->RunJob([]() {
+  ...Some job executed.
+});
+
+//Wait for job to complete. Note: Jobs run serially. We are waiting on second task so both task will be finished after this wait.
 Future.wait();
 
 //Submit another job
