@@ -30,27 +30,6 @@ Future = Thread->RunJob([]() {
   ...Some job executed.
 });
 ```
-### wgc::NamedThread
-A std::thread that takes a name in it's constructor.
-Calls to wgc::ThisThreadName() will return the name of the NamedThread if it is the current thread otherwise it returns "No Name".
-
-Example:
-```
-wgc::NamedThread Nt("Thread Name", []() {
-  std::this_thread::sleep_for(std::chrono::seconds(1));
-  std::cout << "wgc::ThisThreadName() is: " << wgc::ThisThreadName() << "\n";
-});
-
-std::cout << "Nt.GetName() is: " << Nt.GetName() << "\n";
-std::cout << "Main Thread Name: " << wgc::ThisThreadName() << "\n";
-Nt.join();
-```
-Output:
-```
-Nt.GetName() is: Thread Name
-Main Thread Name: No Name
-wgc::ThisThreadName() is: Thread Name
-```
 ### wgc::ForEachWithIndex
 
 A for-each algorithm that calls handler with item and index.
