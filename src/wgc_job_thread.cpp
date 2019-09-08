@@ -1,11 +1,18 @@
 #include "wgc/wgc_job_thread.h"
+#include "wgc/wgc_named_thread.h"
 
 namespace wgc
 {
   JobThread::JobThread()
   {
-    Thread = std::thread(std::ref(*this));
+    Thread = std::make_unique<std::thread>(std::ref(*this));
   }
+
+  JobThread::JobThread(const std::string& ThreadName)
+  {
+    Thread = std::make_unique<wgc::NamedThread>(ThreadName, std::ref(*this));
+  }
+
   void JobThread::operator()()
   {
     while(Alive)
@@ -39,9 +46,9 @@ namespace wgc
   JobThread::~JobThread()
   {
     RunJob(StopTask);
-    if(Thread.joinable())
+    if(Thread->joinable())
     {
-      Thread.join();
+      Thread->join();
     }
   }
 } // namespace wgc

@@ -7,6 +7,7 @@
 #include <mutex>
 #include <queue>
 #include <thread>
+#include <memory>
 
 namespace wgc
 {
@@ -16,6 +17,7 @@ namespace wgc
     using Task = std::function<void()>;
 
     JobThread();
+    JobThread(const std::string& ThreadName);
     JobThread(const JobThread&) = delete;
     JobThread(JobThread&&) = delete;
     JobThread& operator=(const JobThread&) = delete;
@@ -30,7 +32,7 @@ namespace wgc
     std::mutex Guard;
     std::condition_variable Condition;
     std::queue<std::packaged_task<void()>> Jobs;
-    std::thread Thread;
+    std::unique_ptr<std::thread> Thread;
     const Task StopTask = [this]() { Alive = false; };
   };
 } // namespace wgc

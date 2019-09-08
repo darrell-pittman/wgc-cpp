@@ -30,6 +30,21 @@ Future = Thread->RunJob([]() {
   ...Some job executed.
 });
 ```
+JobThread can also be constructed with a name. It will the use a wgc::NamedThread to run the tasks.
+
+Example:
+```
+wgc::JobThread WithName("My Name");
+WithName.RunJob([]() { std::cout << "WithName name is: " << wgc::ThisThreadName() << "\n"; });
+
+wgc::JobThread NoName;
+NoName.RunJob([]() { std::cout << "NoName Name is: " << wgc::ThisThreadName() << "\n"; });
+```
+Output:
+```
+WithName name is: My Name
+NoName Name is: No Name
+```
 ### wgc::NamedThread
 A std::thread that takes a name in it's constructor.
 Calls to wgc::ThisThreadName() will return the name of the NamedThread if it is the current thread otherwise it returns "No Name".
