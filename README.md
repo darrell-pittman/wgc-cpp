@@ -30,7 +30,7 @@ Future = Thread->RunJob([]() {
   ...Some job executed.
 });
 ```
-JobThread can also be constructed with a name. It will the use a wgc::NamedThread to run the tasks.
+JobThread can also be constructed with a name. It will then use a wgc::NamedThread to run the tasks.
 
 Example:
 ```
