@@ -1,7 +1,5 @@
 #include "wgc/wgc_job_thread.h"
 
-#include <algorithm>
-
 namespace wgc
 {
   JobThread::JobThread()
