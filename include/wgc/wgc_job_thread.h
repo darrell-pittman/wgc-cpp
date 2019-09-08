@@ -3,10 +3,9 @@
 
 #include <condition_variable>
 #include <functional>
-#include <memory>
+#include <future>
 #include <mutex>
 #include <queue>
-#include <string>
 #include <thread>
 
 namespace wgc
@@ -15,26 +14,24 @@ namespace wgc
   {
   public:
     using Task = std::function<void()>;
-    JobThread(){};
+
+    JobThread();
     JobThread(const JobThread&) = delete;
     JobThread(JobThread&&) = delete;
     JobThread& operator=(const JobThread&) = delete;
     JobThread& operator=(JobThread&&) = delete;
+    ~JobThread();
 
     void operator()();
-    void RunJob(Task InJob);
-    void Wait();
-    void Stop(bool BlockUnitlStopped = true);
-    void Join();
-    virtual ~JobThread();
+    std::future<void> RunJob(Task InJob);
 
   private:
-    bool Alive = false;
+    bool Alive{true};
     std::mutex Guard;
     std::condition_variable Condition;
-    bool Executing = false;
-    std::queue<Task> Jobs;
+    std::queue<std::packaged_task<void()>> Jobs;
     std::thread Thread;
+    const Task StopTask = [this]() { Alive = false; };
   };
 } // namespace wgc
 

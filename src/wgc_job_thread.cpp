@@ -1,70 +1,49 @@
 #include "wgc/wgc_job_thread.h"
 
+#include <algorithm>
+
 namespace wgc
 {
+  JobThread::JobThread()
+  {
+    Thread = std::thread(std::ref(*this));
+  }
   void JobThread::operator()()
   {
     while(Alive)
     {
+      std::packaged_task<void()> Job;
       std::unique_lock<std::mutex> Lock(Guard);
-      Condition.wait(Lock, [this]{return !Alive || Executing;});
-      if(Alive)
+      Condition.wait(Lock, [this] { return !(Alive && Jobs.empty()); });
+      if(Jobs.empty())
       {
-        while(!Jobs.empty())
-        {
-          Jobs.front()();
-          Jobs.pop();
-        }
+        continue;
       }
-      Executing = false;
-      Condition.notify_one();      
+      Job = std::move(Jobs.front());
+      Jobs.pop();
+      Lock.unlock();
+      Job();
+      Condition.notify_one();
     }
   }
 
-  void JobThread::RunJob(Task InJob)
+  std::future<void> JobThread::RunJob(Task InJob)
   {
+    std::packaged_task<void()> Job(InJob);
+    std::future<void> Future = Job.get_future();
     std::unique_lock<std::mutex> Lock(Guard);
-    Jobs.push(InJob);
-    if(!Alive)
-    {
-      Alive = true;
-      Thread = std::thread(std::ref(*this));
-    }
-    Executing = true;
+    Jobs.push(std::move(Job));
+    Lock.unlock();
     Condition.notify_one();
+    return Future;
   }
 
-  void JobThread::Wait()
+  JobThread::~JobThread()
   {
-    std::unique_lock<std::mutex> Lock(Guard);
-    Condition.wait(Lock, [this]{return !Alive || !Executing;});
-    Condition.notify_one();    
-  }
-
-  void JobThread::Join()
-  {
+    RunJob(StopTask);
     if(Thread.joinable())
     {
       Thread.join();
     }
   }
-
-  void JobThread::Stop(const bool BlockUntilStopped)
-  {
-      Wait();
-      {
-        std::lock_guard<std::mutex> Lock(Guard);
-        Alive = false;
-        Condition.notify_one();
-      }
-      if(BlockUntilStopped)
-      {
-        Join();
-      }
-  }
-
-  JobThread::~JobThread()
-  {
-    Stop(true);
-  }
-}
+} // namespace wgc
