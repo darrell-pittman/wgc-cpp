@@ -1,5 +1,4 @@
 #include "wgc/wgc_job_thread.h"
-#include "wgc/wgc_named_thread.h"
 
 namespace wgc
 {
