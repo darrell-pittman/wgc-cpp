@@ -10,20 +10,22 @@ Example usage:
 ```
 auto Thread = std::unique_ptr<wgc::JobThread>();
 
-//Submit job
+// Submit job
 std::future<void> Future = Thread->RunJob([]() {
   ...Some job executed.
 });
 
-//Submit another job
+// Submit another job
 Future = Thread->RunJob([]() {
   ...Some job executed.
 });
 
-//Wait for job to complete. Note: Jobs run serially. We are waiting on second task so both task will be finished after this wait.
+// Wait for job to complete. Note: Jobs run serially.
+// Here We are waiting on second task's future so both tasks
+// will be finished after this wait.
 Future.wait();
 
-//Submit another job
+// Submit another job
 Future = Thread->RunJob([]() {
   ...Some job executed.
 });
